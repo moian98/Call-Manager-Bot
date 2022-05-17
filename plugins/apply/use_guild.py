@@ -2,7 +2,7 @@ import qqbot
 from qqbot.model.ws_context import WsContext
 from constant import Token, Bot_name, config
 from constant.words import BotDefault
-from flow.reply import reply_text
+from flow.reply import reply_text, reply_text_pic
 from plugins.modules.guild_info import GuildInfo
 from plugins.modules.owner_info import OwnerInfo
 from plugins.modules.bot_info import BotInfo
@@ -59,6 +59,30 @@ async def robot_in_guild(context: WsContext, guilds: qqbot.Guild):
         if del_guild is True and del_owner is True:
             msg = f"小可爱{Bot_name}被{guilds.name}({guilds.id}) 的管理员踹走了"
             print(msg)
+
+
+async def forward_channel(message: qqbot.Message):
+    """设置转发子频道"""
+    channel: bool = await GuildInfo.set_forward_channel(bot.id, message.guild_id, message.channel_id)
+    msg = "✅已将该子频道设置为问题反馈转发子频道" if channel else "❎设置失败"
+    await reply_text(message, msg)
+
+
+async def problem_feedback(message: qqbot.Message, params=None):
+    """转发问题反馈"""
+    if params is None or params == "":
+        return reply_text(message=message, content="❎请输入要反馈的问题。")
+    channel_id = await GuildInfo.get_forward_channel(bot.id, message.guild_id)
+
+    msg = "🔔有频友反馈问题啦！" \
+          "\n🆕来自<#%s>的<@%s>说：" \
+          "\n-------------------\n" \
+          % (message.channel_id, message.author.id) + params
+    await reply_text(
+        message=message,
+        content=msg,
+        channel_id=channel_id
+    )
 
 
 async def robot_status(message: qqbot.Message, params=None):

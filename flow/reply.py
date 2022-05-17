@@ -46,6 +46,42 @@ async def reply_text(message: qqbot.Message, content: str, channel_id=None, msg_
     )
 
 
+async def reply_text_pic(message: qqbot.Message, content: str, channel_id=None, msg_id=None, url=None):
+    """发送回复消息
+    - message：固定的参数 `qqbot.Message`
+    - content：回复文本内容
+    - channel_id：发送消息的子频道ID `(选填)`
+    - msg_id: 消息ID `(选填)`
+    - url：图片地址`(选填)`
+    """
+    message_api = qqbot.AsyncMessageAPI(qqbot.Token(APPID, TOKEN), False, timeout=6)
+    if channel_id is None:
+        message_channel_id = message.channel_id
+    else:
+        message_channel_id = channel_id
+    if msg_id is None:
+        message_msg_id = message.id
+    else:
+        message_msg_id = msg_id
+    if url is None:
+        await message_api.post_message(
+            message_channel_id,
+            MessageSendRequest(
+                content=content,
+                msg_id=message_msg_id,
+            ),
+        )
+    else:
+        await message_api.post_message(
+            message_channel_id,
+            MessageSendRequest(
+                content=content,
+                msg_id=message_msg_id,
+                image=url
+            )
+        )
+
+
 async def notify_text(channel_id: str, content: str, message_id=None):
     """推送主动消息
     - channel_id：子频道ID

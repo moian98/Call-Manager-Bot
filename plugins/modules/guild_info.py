@@ -40,6 +40,12 @@ class GuildInfo(Model):
     robot_status = fields.BooleanField(
         source_field="机器人状态",
         default=True)
+    """转发子频道"""
+    forward_channel = fields.CharField(
+        max_length=20,
+        source_field="转发子频道",
+        default=""
+    )
 
     class Meta:
         table = "guild_info"
@@ -60,6 +66,23 @@ class GuildInfo(Model):
         """获取频道名称"""
         record = await cls.get_or_none(bot_id=bot_id, guild_id=guild_id)
         return None if record is None else record.guild_name
+
+    @classmethod
+    async def set_forward_channel(cls, bot_id: str, guild_id: str, channel_id: str) -> bool:
+        """设置转发子频道"""
+        record: GuildInfo = await cls.get_or_none(bot_id=bot_id, guild_id=guild_id)
+        if record is not None:
+            record.forward_channel = channel_id
+            await record.save(update_fields=["forward_channel"])
+            return True
+        else:
+            return False
+
+    @classmethod
+    async def get_forward_channel(cls, bot_id: str, guild_id: str) -> Optional[str]:
+        """获取转发子频道"""
+        record = await cls.get_or_none(bot_id=bot_id, guild_id=guild_id)
+        return None if record is None else record.forward_channel
 
     @classmethod
     async def get_robot_status(cls, bot_id: str, guild_id: str) -> Optional[bool]:

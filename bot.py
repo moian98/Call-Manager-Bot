@@ -7,7 +7,12 @@ from constant.words import BotReply
 from flow.reply import reply_text
 from util.decorated import Command, Role
 from util.database import database_init
-from plugins.apply.use_guild import robot_status, robot_in_guild
+from plugins.apply.use_guild import (
+    robot_status,
+    robot_in_guild,
+    forward_channel,
+    problem_feedback
+)
 from plugins.apply.use_owner import (
     owner_init,
     owner_channel,
@@ -102,6 +107,25 @@ async def handler_see_me(message: qqbot.Message, params=None):
     return True
 
 
+@Command("设置反馈子频道")
+@Role("管理员")
+async def handler_forward_channel(message: qqbot.Message, params=None):
+    await forward_channel(message)
+    return True
+
+
+@Command("反馈问题")
+async def handler_problem_feedback(message: qqbot.Message, params=None):
+    await problem_feedback(message, params)
+    return True
+
+
+@Command("问题反馈")
+async def handler_problem_feedback_1(message: qqbot.Message, params=None):
+    await problem_feedback(message, params)
+    return True
+
+
 @Command("删除管理")
 @Role("超级管理员")
 async def handler_delete_owner(message: qqbot.Message, params=None):
@@ -162,6 +186,9 @@ async def _at_message_handler(event, message: qqbot.Message):
         handler_get_owner_ol,  # 查看在线管理
         handler_see_me,  # 查看信息
         handler_direct_open,  # 私信开关
+        handler_forward_channel,  # 设置反馈子频道
+        handler_problem_feedback,  # 问题反馈
+        handler_problem_feedback_1,  # 问题反馈
         handler_delete_owner,  # 删除管理
         handler_see_totals,  # 查看统计
     ]
