@@ -30,7 +30,7 @@ async def robot_in_guild(context: WsContext, guilds: qqbot.Guild):
         channel_list = []
 
         for i in channels:
-            if i.type == 0:
+            if i.type == 0 and int(i.permissions) > 3:
                 channel_list.append(i.id)
 
         default_status: bool = config["default"]["robot-status"]
