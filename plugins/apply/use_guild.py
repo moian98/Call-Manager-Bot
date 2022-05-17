@@ -1,8 +1,7 @@
 import qqbot
 from qqbot.model.ws_context import WsContext
 from constant import Token, Bot_name, config
-from constant.words import BotDefault
-from flow.reply import reply_text, reply_text_pic
+from flow.reply import reply_text
 from plugins.modules.guild_info import GuildInfo
 from plugins.modules.owner_info import OwnerInfo
 from plugins.modules.bot_info import BotInfo
@@ -70,9 +69,12 @@ async def forward_channel(message: qqbot.Message):
 
 async def problem_feedback(message: qqbot.Message, params=None):
     """转发问题反馈"""
-    if params is None or params == "":
-        return reply_text(message=message, content="❎请输入要反馈的问题。")
     channel_id = await GuildInfo.get_forward_channel(bot.id, message.guild_id)
+    if not channel_id or channel_id == "":
+        return reply_text(
+            message=message,
+            content="❎还没有设置问题反馈的子频道呢，先让管理员设置一下吧"
+        )
 
     msg = "🔔有频友反馈问题啦！" \
           "\n🆕来自<#%s>的<@%s>说：" \

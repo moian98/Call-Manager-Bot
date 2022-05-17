@@ -122,6 +122,8 @@ async def handler_problem_feedback(message: qqbot.Message, params=None):
 
 @Command("问题反馈")
 async def handler_problem_feedback_1(message: qqbot.Message, params=None):
+    if params is None or params == "":
+        return False
     await problem_feedback(message, params)
     return True
 
