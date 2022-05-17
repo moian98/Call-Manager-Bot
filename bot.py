@@ -49,7 +49,7 @@ async def handle_get_menu(message: qqbot.Message, params=None):
 
 
 @Command("管理注册")
-@Role("全体管理")
+@Role("子频道管理,管理员")
 async def handler_owner_init(message: qqbot.Message, params=None):
     await owner_init(message)
     return True
@@ -116,6 +116,8 @@ async def handler_forward_channel(message: qqbot.Message, params=None):
 
 @Command("反馈问题")
 async def handler_problem_feedback(message: qqbot.Message, params=None):
+    if params is None or params == "":
+        return False
     await problem_feedback(message, params)
     return True
 
@@ -137,7 +139,7 @@ async def handler_delete_owner(message: qqbot.Message, params=None):
     return True
 
 
-@Command("查看统计")
+@Command("统计")
 @Role("超级管理员")
 async def handler_see_totals(message: qqbot.Message, params=None):
     await bot_totals(message)

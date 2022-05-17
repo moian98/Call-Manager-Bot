@@ -6,6 +6,7 @@ import time
 from multiprocessing import Process
 from plugins.modules.bot_info import BotInfo
 from constant.words import BotDefault
+from util.database import database_init
 
 
 def start_schedule_processes():
@@ -18,7 +19,7 @@ def schedule_sign_notify():
     每天定时提醒签到
     """
 
-    schedule.every().day.at("23:59").do(refresh_bot_today)
+    schedule.every().day.at("01:30").do(refresh_bot_today)
 
     while True:
         schedule.run_pending()
@@ -28,6 +29,7 @@ def schedule_sign_notify():
 def refresh_bot_today():
     try:
         loop = asyncio.get_event_loop()
+        loop.run_until_complete(database_init())
         loop.run_until_complete(
             BotInfo.refresh_today(BotDefault.DEFAULT_BOT)
         )
