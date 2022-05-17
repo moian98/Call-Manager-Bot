@@ -116,6 +116,8 @@ async def handler_forward_channel(message: qqbot.Message, params=None):
 
 @Command("反馈问题")
 async def handler_problem_feedback(message: qqbot.Message, params=None):
+    if params is None or params == "":
+        return False
     await problem_feedback(message, params)
     return True
 
