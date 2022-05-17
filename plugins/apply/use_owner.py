@@ -4,6 +4,7 @@ from constant import Token
 from flow.reply import reply_text, reply_direct_text
 from plugins.modules.owner_info import OwnerInfo
 from plugins.modules.bot_info import BotInfo
+from qqbot.core.exception.error import AuthenticationFailedError
 
 bot_api = qqbot.UserAPI(Token, False)
 bot = bot_api.me()
@@ -65,7 +66,11 @@ async def owner_channel(message: qqbot.Message):
             content="❎<@%s>你还没有注册呢，请先使用指令：@召唤管理 /管理注册" % message.author.id
         )
     channel_api = qqbot.AsyncChannelPermissionsAPI(Token, False)
-    channel = await channel_api.get_channel_permissions(message.channel_id, message.author.id)
+    try:
+        channel = await channel_api.get_channel_permissions(message.channel_id, message.author.id)
+    except AuthenticationFailedError:
+        return await reply_text(message=message, content="❎小召要判断你是否是此子频道的管理员，但权限不足，请授权小召为管理员。")
+
     if int(channel.permissions) < 6:
         return await reply_text(message=message, content="❎<@%s>你不是当前子频道的管理员，无法添加" % message.author.id)
 
@@ -189,17 +194,17 @@ async def get_sign_user(message: qqbot.Message):
 
     guild_api = qqbot.AsyncGuildAPI(Token, False)
     guild = await guild_api.get_guild(message.guild_id)
-    dir_status = await OwnerInfo.get_direct_status(
-        bot_id=bot.id,
-        guild_id=message.guild_id,
-        user_id=message.author.id
-    )
     if len(c_channels) > 0:
         user_id = random.choice(c_channels)
         content = "🔔已向子频道管理员<@%s>发送通知，请等候……" % user_id
         await reply_text(
             message=message,
             content=content
+        )
+        dir_status = await OwnerInfo.get_direct_status(
+            bot_id=bot.id,
+            guild_id=message.guild_id,
+            user_id=user_id
         )
         if dir_status is True:
             await reply_direct_text(
@@ -214,6 +219,11 @@ async def get_sign_user(message: qqbot.Message):
             message=message,
             content=content
         )
+        dir_status = await OwnerInfo.get_direct_status(
+            bot_id=bot.id,
+            guild_id=message.guild_id,
+            user_id=user_id
+        )
         if dir_status is True:
             await reply_direct_text(
                 message=message,
@@ -225,6 +235,11 @@ async def get_sign_user(message: qqbot.Message):
         await reply_text(
             message=message,
             content=content
+        )
+        dir_status = await OwnerInfo.get_direct_status(
+            bot_id=bot.id,
+            guild_id=message.guild_id,
+            user_id=crete_channel
         )
         if dir_status is True:
             await reply_direct_text(
@@ -329,7 +344,7 @@ async def delete_owner(message: qqbot.Message):
 
 async def see_me(message: qqbot.Message, params=None):
     """查看管理员信息"""
-    if params is None or params == "":
+    if params is None or params == "" or params == "我":
         user_id = message.author.id
     else:
         user_id = message.mentions[1].id
