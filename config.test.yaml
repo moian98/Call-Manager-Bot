@@ -1,0 +1,18 @@
+# test yaml 用于设置test相关的参数，开源版本需要去掉参数
+token:
+  appid: "你的APPID"
+  token: "你的TOKEN"
+path:
+  imgurl: "C:/QQBot/resource/images"  # 图片保存路径
+  jsonurl: "C:/QQBot/resource/statics"  # Josn文件保存路径
+bot:
+  nickname: "小招"  # 机器人昵称
+default:
+  robot-welcome-status: false  # 群默认欢迎开关
+  robot-welcome: 欢迎新同学来到本频道。  # 默认机器人的欢迎语
+  robot-exit-status: false  # 群默认离开开关
+  robot-exit: 默默地离开了我们……  # 默认成员离开说辞
+  robot-goodnight-status: false  # 群默认晚安开关
+  robot-goodnight: 小招要去睡觉了，大家晚安……  # 默认晚安说辞
+  private-chat: true  # 是否开启智能私聊，开启后私聊机器人会获得回复
+  robot-status: false  # 机器人在每个群默认开启状态
