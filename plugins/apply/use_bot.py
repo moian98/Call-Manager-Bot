@@ -15,10 +15,10 @@ async def bot_totals(message: qqbot.Message):
 1️⃣今日新增频道：{data["guild_today"]}个
 2️⃣今日新增用户：{data["user_today"]}人
 3️⃣今日处理消息：{data["msg_today"]}条
-————————————————
+—————————————
 4️⃣当前加入频道：{data["guild_count"]}个
 5️⃣当前使用用户：{data["user_count"]}人
-————————————————
+—————————————
 6️⃣累计加入频道：{data["guild_total"]}个
 7️⃣累计使用用户：{data["user_total"]}人
 8️⃣累计处理消息：{data["msg_total"]}条
