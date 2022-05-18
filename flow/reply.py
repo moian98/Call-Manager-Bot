@@ -28,7 +28,7 @@ async def reply_text(message: qqbot.Message, content: str, channel_id=None, msg_
     - channel_id：发送消息的子频道ID `(选填)`
     - msg_id: 消息ID `(选填)`
     """
-    message_api = qqbot.AsyncMessageAPI(qqbot.Token(APPID, TOKEN), False, timeout=6)
+    message_api = qqbot.AsyncMessageAPI(qqbot.Token(APPID, TOKEN), False, timeout=3)
     if channel_id is None:
         message_channel_id = message.channel_id
     else:
