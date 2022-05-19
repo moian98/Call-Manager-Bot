@@ -19,7 +19,7 @@ def schedule_sign_notify():
     每天定时提醒签到
     """
 
-    schedule.every().day.at("01:30").do(refresh_bot_today)
+    schedule.every().day.at("23:59").do(refresh_bot_today)
 
     while True:
         schedule.run_pending()
