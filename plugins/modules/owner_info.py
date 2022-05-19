@@ -290,3 +290,12 @@ class OwnerInfo(Model):
             await record.delete()
             return True
         return False
+
+    @classmethod
+    async def check_role(cls, bot_id: str, guild_id: str, user_id: str, user_name: str, role_id: str) -> None:
+        """更新管理资料"""
+        record: OwnerInfo = await cls.get_or_none(bot_id=bot_id, guild_id=guild_id, user_id=user_id)
+        if record is not None:
+            record.user_name = user_name
+            record.user_role = role_id
+            await record.save(update_fields=["user_name", "user_role"])
