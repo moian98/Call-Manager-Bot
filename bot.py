@@ -108,7 +108,7 @@ async def handler_see_me(message: qqbot.Message, params=None):
     return True
 
 
-@Command("设置反馈子频道")
+@Command("设置反馈子频")
 @Role("管理员")
 async def handler_forward_channel(message: qqbot.Message, params=None):
     await forward_channel(message)
