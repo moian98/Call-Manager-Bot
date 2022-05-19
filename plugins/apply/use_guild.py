@@ -85,6 +85,10 @@ async def problem_feedback(message: qqbot.Message, params=None):
         content=msg,
         channel_id=channel_id
     )
+    await reply_text(
+        message=message,
+        content="✅已将问题反馈给管理员，请耐心等候处理结果……"
+    )
 
 
 async def robot_status(message: qqbot.Message, params=None):
