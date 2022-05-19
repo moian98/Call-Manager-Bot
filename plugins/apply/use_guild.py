@@ -63,7 +63,7 @@ async def robot_in_guild(context: WsContext, guilds: qqbot.Guild):
 async def forward_channel(message: qqbot.Message):
     """设置转发子频道"""
     channel: bool = await GuildInfo.set_forward_channel(bot.id, message.guild_id, message.channel_id)
-    msg = "✅已将该子频道设置为问题反馈转发子频道" if channel else "❎设置失败"
+    msg = "✅已将该子频道设置为问题反馈接收子频道" if channel else "❎设置失败"
     await reply_text(message, msg)
 
 
