@@ -94,6 +94,7 @@ async def handler_get_owner_ol(message: qqbot.Message, params=None):
 
 
 @Command("私信通知")
+@Role("子频道管理,管理员")
 async def handler_direct_open(message: qqbot.Message, params=None):
     if params is None or params == "":
         return False
@@ -131,7 +132,7 @@ async def handler_problem_feedback_1(message: qqbot.Message, params=None):
 
 
 @Command("删除管理")
-@Role("超级管理员")
+@Role("超级管理员,频道主")
 async def handler_delete_owner(message: qqbot.Message, params=None):
     if params is None or params == "":
         return False
