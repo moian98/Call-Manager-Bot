@@ -70,8 +70,8 @@ async def forward_channel(message: qqbot.Message):
 async def problem_feedback(message: qqbot.Message, params=None):
     """转发问题反馈"""
     channel_id = await GuildInfo.get_forward_channel(bot.id, message.guild_id)
-    if not channel_id or channel_id == "":
-        return reply_text(
+    if not channel_id or channel_id is None:
+        return await reply_text(
             message=message,
             content="❎还没有设置问题反馈的子频道呢，先让管理员设置一下吧"
         )
