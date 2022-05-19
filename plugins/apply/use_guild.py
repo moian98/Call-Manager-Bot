@@ -34,7 +34,7 @@ async def robot_in_guild(context: WsContext, guilds: qqbot.Guild):
 
         default_status: bool = config["default"]["robot-status"]
         if default_status:
-            msg = "锵锵锵，你的管理小助手驾到，希望我能帮助管理员们更好的管理频道。"
+            msg = "锵锵锵，你的管理小助手驾到，希望小召能帮助管理员们更好的管理频道。\n使用指令@召唤管理 /帮助 查看详细说明"
             await reply_text(
                 message=qqbot.Message,
                 content=msg,
@@ -43,7 +43,7 @@ async def robot_in_guild(context: WsContext, guilds: qqbot.Guild):
 
         status = await GuildInfo.get_robot_status(bot.id, guilds.id)
         if status is None or status is True:
-            msg = "锵锵锵，你的管理小助手驾到，希望我能帮助管理员们更好的管理频道。"
+            msg = "锵锵锵，你的管理小助手驾到，希望小召能帮助管理员们更好的管理频道。\n使用指令@召唤管理 /帮助 查看详细说明"
             await reply_text(
                 message=qqbot.Message,
                 content=msg,
