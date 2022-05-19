@@ -133,7 +133,24 @@ async def owner_sign_in(message: qqbot.Message):
             message=message,
             content="❎<@%s>你还没有注册呢，请先使用指令：@召唤管理 /管理注册" % message.author.id
         )
-
+    member_api = qqbot.AsyncGuildMemberAPI(Token, False)
+    member = await member_api.get_guild_member(message.guild_id, message.author.id)
+    role_id = ""
+    if CRETE_ROLE_ID in member.roles:
+        role_id = "4"
+    elif OW_ROLE_ID in member.roles:
+        role_id = "2"
+    elif C_ROLE_ID in member.roles:
+        role_id = "5"
+    user_role = await OwnerInfo.get_user_role(bot.id, message.guild_id, message.author.id)
+    if user_role != role_id:
+        await OwnerInfo.check_role(
+            bot_id=bot.id,
+            guild_id=message.guild_id,
+            user_id=message.author.id,
+            user_name=message.author.username,
+            role_id=role_id
+        )
     sign_on: int = await OwnerInfo.set_sign_in(
         bot_id=bot.id,
         guild_id=message.guild_id,
