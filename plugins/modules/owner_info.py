@@ -12,75 +12,75 @@ class OwnerInfo(Model):
         source_field="ID",
         null=False
     )
-    """"机器人ID"""
     bot_id = fields.CharField(
         max_length=20,
         source_field="BotID",
         null=False
     )
-    """频道ID"""
+    """"机器人ID"""
     guild_id = fields.CharField(
         max_length=20,
         source_field="频道ID",
         null=False
     )
-    """管理员ID"""
+    """频道ID"""
     user_id = fields.CharField(
         max_length=20,
         source_field="管理员ID",
         null=False
     )
-    """管理员昵称"""
+    """管理员ID"""
     user_name = fields.CharField(
         max_length=20,
         source_field="管理员昵称",
         default=""
     )
-    """管理员权限"""
+    """管理员昵称"""
     user_role = fields.CharField(
         max_length=2,
         source_field="管理员权限",
         default=""
     )
-    """管理子频道"""
+    """管理员权限"""
     channels = fields.JSONField(
         source_field="管理子频道",
         default=[]
     )
-    """是否在线"""
+    """管理子频道"""
     sign_ol = fields.BooleanField(
         source_field="是否在线",
         default=False
     )
-    """签到时间"""
+    """是否在线"""
     sign_on_time = fields.CharField(
         max_length=20,
         source_field="签到时间",
         default=""
     )
-    """签退时间"""
+    """签到时间"""
     sign_out_time = fields.CharField(
         max_length=20,
         source_field="签退时间",
         default=""
     )
-    """累计值班时间"""
+    """签退时间"""
     duty_times = fields.IntField(
         max_length=10,
         source_field="累计时间",
         default=0
     )
-    """值班次数"""
+    """累计值班时间"""
     duty_count = fields.IntField(
         max_length=5,
         source_field="值班次数",
         default=0
     )
-    """私信开关"""
+    """值班次数"""
     direct_status = fields.BooleanField(
         source_field="私信开关",
         default=True
     )
+    """私信开关"""
 
     class Meta:
         table = "owner_info"
@@ -139,8 +139,7 @@ class OwnerInfo(Model):
         if record.sign_ol is False:
             record.sign_ol = True
             record.sign_on_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            record.duty_count += 1
-            await record.save(update_fields=["sign_ol", "sign_on_time", "duty_count"])
+            await record.save(update_fields=["sign_ol", "sign_on_time"])
             return 1
         else:
             return 2
@@ -153,6 +152,7 @@ class OwnerInfo(Model):
             record.sign_ol = False
             now_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             record.sign_out_time = now_time
+            record.duty_count += 1
             # 计算值班时间
             sign_on = datetime.datetime.strptime(str(record.sign_on_time), "%Y-%m-%d %H:%M:%S")
             now_time_s = datetime.datetime.strptime(now_time, "%Y-%m-%d %H:%M:%S")
@@ -160,7 +160,7 @@ class OwnerInfo(Model):
             secs = duty_time.total_seconds()
             minute = int(secs // 60)
             record.duty_times += minute
-            await record.save(update_fields=["sign_ol", "sign_out_time", "duty_times"])
+            await record.save(update_fields=["sign_ol", "sign_out_time", "duty_count", "duty_times"])
             return minute
         else:
             return False
