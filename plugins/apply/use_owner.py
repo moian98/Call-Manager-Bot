@@ -286,21 +286,21 @@ async def get_sign_ol(message: qqbot.Message):
     member_api = qqbot.AsyncGuildMemberAPI(Token, False)
     msg = "📇当前在线管理员如下：\n------------------\n"
     if len(c_channels) == 0:
-        msg += "🔵子频道管理员：\n   本子频道暂无"
+        msg += "🔵子频道管理员：\n    本子频道暂无"
     else:
         msg += "🔵子频道管理员："
         for i in c_channels:
             user = await member_api.get_guild_member(message.guild_id, i)
-            msg += "\n  「%s」" % user.nick
+            msg += "\n    🔹%s" % user.nick
     if len(manager_channels) > 0:
         msg += "\n🟢管理员："
         for i in manager_channels:
             user = await member_api.get_guild_member(message.guild_id, i)
-            msg += "\n  「%s」" % user.nick
+            msg += "\n    🔹%s" % user.nick
 
     if crete_channel != "":
         user = await member_api.get_guild_member(message.guild_id, crete_channel)
-        msg += "\n🔴频道主：%s" % user.nick
+        msg += "\n🔴频道主：🔹%s" % user.nick
 
     await reply_text(message=message, content=msg)
 
