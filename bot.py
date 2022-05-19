@@ -44,7 +44,7 @@ async def handle_get_help(message: qqbot.Message, params=None):
 @Command("菜单")
 async def handle_get_menu(message: qqbot.Message, params=None):
     """帮助指令"""
-    await reply_text(message, content=BotReply.DUTY_HELP)
+    await reply_text(message, content=BotReply.DUTY_MENU)
     return True
 
 
@@ -55,14 +55,14 @@ async def handler_owner_init(message: qqbot.Message, params=None):
     return True
 
 
-@Command("添加子频道")
+@Command("添加子频")
 @Role("子频道管理")
 async def handler_owner_channel(message: qqbot.Message, params=None):
     await owner_channel(message)
     return True
 
 
-@Command("删除子频道")
+@Command("删除子频")
 @Role("子频道管理")
 async def handler_delete_channel(message: qqbot.Message, params=None):
     await delete_channel(message)
@@ -87,7 +87,7 @@ async def handler_get_owner(message: qqbot.Message, params=None):
     return True
 
 
-@Command("查看在线管理")
+@Command("查看在线")
 async def handler_get_owner_ol(message: qqbot.Message, params=None):
     await get_sign_ol(message)
     return True
