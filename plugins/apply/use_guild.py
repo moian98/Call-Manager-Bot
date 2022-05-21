@@ -1,6 +1,6 @@
 import qqbot
 from qqbot.model.ws_context import WsContext
-from constant import Token, Bot_name, config
+from constant import Token, Bot_name
 from flow.reply import reply_text
 from plugins.modules.guild_info import GuildInfo
 from plugins.modules.owner_info import OwnerInfo
@@ -32,23 +32,16 @@ async def robot_in_guild(context: WsContext, guilds: qqbot.Guild):
             if i.type == 0 and int(i.permissions) > 3:
                 channel_list.append(i.id)
 
-        default_status: bool = config["default"]["robot-status"]
-        if default_status:
-            msg = "锵锵锵，你的管理小助手驾到，希望小召能帮助管理员们更好的管理频道。\n使用指令@召唤管理 /帮助 查看详细说明"
-            await reply_text(
-                message=qqbot.Message,
-                content=msg,
-                channel_id=channel_list[0],
-                msg_id=context.event_id)
-
         status = await GuildInfo.get_robot_status(bot.id, guilds.id)
         if status is None or status is True:
-            msg = "锵锵锵，你的管理小助手驾到，希望小召能帮助管理员们更好的管理频道。\n使用指令@召唤管理 /帮助 查看详细说明"
+            msg = "锵锵锵，你的管理小助手驾到，希望小召能帮助管理员们更好的管理频道。\n使用指令@召唤管理 /帮助 " \
+                  "查看详细说明。\n另外，使用过程中小召会发送私信通知管理员，所以请频道主将小召私信限制调到最高，" \
+                  "否则超过次数限制，将无法发送私信。谢谢。 "
             await reply_text(
                 message=qqbot.Message,
                 content=msg,
                 channel_id=channel_list[0],
-                msg_id=context.event_id)
+                msg_id="0")
 
     if context.event_type == "GUILD_DELETE":
         qqbot.logger.info("机器人被移除%s频道[ID：%s]" % (guilds.name, guilds.id))
