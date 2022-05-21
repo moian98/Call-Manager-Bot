@@ -143,6 +143,12 @@ async def owner_sign_in(message: qqbot.Message):
     elif C_ROLE_ID in member.roles:
         role_id = "5"
     user_role = await OwnerInfo.get_user_role(bot.id, message.guild_id, message.author.id)
+    channels = await OwnerInfo.get_channels(bot.id, message.guild_id, message.author.id)
+    if user_role == "5" and not channels:
+        return await reply_text(
+            message=message,
+            content="❎子频道管理员请先添加你所管理的子频道。"
+        )
     if user_role != role_id:
         await OwnerInfo.check_role(
             bot_id=bot.id,
