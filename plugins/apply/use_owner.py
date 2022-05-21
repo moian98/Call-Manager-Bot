@@ -217,7 +217,9 @@ async def get_sign_user(message: qqbot.Message):
 
     guild_api = qqbot.AsyncGuildAPI(Token, False)
     guild = await guild_api.get_guild(message.guild_id)
-    if len(c_channels) > 0:
+    member_api = qqbot.AsyncGuildMemberAPI(Token, False)
+    member = await member_api.get_guild_member(message.guild_id, message.author.id)
+    if len(c_channels) > 0 and C_ROLE_ID not in member.roles:
         user_id = random.choice(c_channels)
         content = "🔔已向子频道管理员<@%s>发送通知，请等候……" % user_id
         await reply_text(
@@ -237,7 +239,7 @@ async def get_sign_user(message: qqbot.Message):
             )
     elif len(manager_channels) > 0:
         user_id = random.choice(manager_channels)
-        content = "🔔当前子频道没有签到在线的蓝牌管理员，已向绿牌管理员<@%s>发送通知，请等候……" % user_id
+        content = "🔔已向管理员<@%s>发送通知，请等候……" % user_id
         await reply_text(
             message=message,
             content=content
@@ -254,7 +256,7 @@ async def get_sign_user(message: qqbot.Message):
                 user_id=user_id
             )
     elif crete_channel != "":
-        content = "🔔当前没有签到在线的蓝牌管理员，已向频道主<@%s>发送通知，请等候……" % crete_channel
+        content = "🔔已向频道主<@%s>发送通知，请等候……" % crete_channel
         await reply_text(
             message=message,
             content=content
@@ -270,6 +272,8 @@ async def get_sign_user(message: qqbot.Message):
                 content="🔔有来自频道：%s 的频友向你发送召唤请求，请前往该频道查看。" % guild.name,
                 user_id=crete_channel
             )
+    else:
+        await reply_text(message=message, content="🔍当前没有绿牌管理员签到在线")
 
 
 async def get_sign_ol(message: qqbot.Message):
