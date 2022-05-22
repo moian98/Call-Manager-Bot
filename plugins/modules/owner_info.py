@@ -31,7 +31,7 @@ class OwnerInfo(Model):
     )
     """管理员ID"""
     user_name = fields.CharField(
-        max_length=20,
+        max_length=30,
         source_field="管理员昵称",
         default=""
     )
