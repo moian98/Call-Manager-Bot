@@ -221,20 +221,27 @@ async def reply_direct_text(message: qqbot.Message, content: str, user_id=None, 
         message_msg_id = msg_id
 
     dms_api = qqbot.AsyncDmsAPI(qqbot.Token(APPID, TOKEN), False, timeout=6)
-    direct_message_guild = await dms_api.create_direct_message(
-        CreateDirectMessageRequest(
-            source_guild_id=message.guild_id,
-            user_id=message_user_id
+    try:
+        direct_message_guild = await dms_api.create_direct_message(
+            CreateDirectMessageRequest(
+                source_guild_id=message.guild_id,
+                user_id=message_user_id
+            )
         )
-    )
-
-    await dms_api.post_direct_message(
-        guild_id=direct_message_guild.guild_id,
-        message_send=MessageSendRequest(
-            content=content,
-            msg_id=message_msg_id
+        await dms_api.post_direct_message(
+            guild_id=direct_message_guild.guild_id,
+            message_send=MessageSendRequest(
+                content=content,
+                msg_id=message_msg_id
+            )
         )
-    )
+    except Exception as e:
+        msg = f"无法向管理员发送私信通知\n错误原因：{e}".replace("create direct message not allowd in this guild", "频道已限制发送私信")
+        qqbot.logger.info(msg)
+        await reply_text(
+            message=message,
+            content=msg
+        )
 
 
 async def reply_direct_text_duty(message: qqbot.Message, content: str, user_id=None, msg_id=None):
