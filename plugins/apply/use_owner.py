@@ -327,7 +327,7 @@ async def direct_status(message: qqbot.Message, params=None):
             message=message,
             content="❎<@%s>你还没有注册呢，请先使用指令：@召唤管理 /管理注册" % message.author.id
         )
-    if params == "开":
+    if params == "开" or params == "开启":
         status = True
     else:
         status = False
