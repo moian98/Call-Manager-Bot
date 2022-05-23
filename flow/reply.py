@@ -82,37 +82,6 @@ async def reply_text_pic(message: qqbot.Message, content: str, channel_id=None, 
         )
 
 
-async def notify_text(channel_id: str, content: str, message_id=None):
-    """推送主动消息
-    - channel_id：子频道ID
-    - content：消息内容
-    - message_id：消息ID `(选填)`
-    """
-    message_api = qqbot.AsyncMessageAPI(qqbot.Token(APPID, TOKEN), False, timeout=6)
-    if message_id is None:
-        msg_id = "0"
-    else:
-        msg_id = message_id
-    await message_api.post_message(channel_id, MessageSendRequest(content=content, msg_id=msg_id))
-
-
-async def reply_text_list(reply_message: qqbot.Message, content_list: List, title):
-    # 发送回复消息
-    message_api = qqbot.AsyncMessageAPI(qqbot.Token(APPID, TOKEN), False, timeout=6)
-    # 构造消息
-    total_content = ""
-    if len(content_list) == 0:
-        total_content = BotDefault.DEFAULT_GET_FEEDBACK
-    else:
-        total_content = total_content.join([content + "\n" for content in content_list])
-
-    # 通过api发送回复消息
-    await message_api.post_message(
-        reply_message.channel_id,
-        qqbot.MessageSendRequest(content=title + "\n" + total_content, msg_id=reply_message.id)
-    )
-
-
 async def reply_markdown_content(channel_id: str, markdown_content: str, message_id: str = None):
     """发送MarkDown模板消息
     - channel_id：要发送的子频道ID
@@ -221,50 +190,24 @@ async def reply_direct_text(message: qqbot.Message, content: str, user_id=None, 
         message_msg_id = msg_id
 
     dms_api = qqbot.AsyncDmsAPI(qqbot.Token(APPID, TOKEN), False, timeout=6)
-    direct_message_guild = await dms_api.create_direct_message(
-        CreateDirectMessageRequest(
-            source_guild_id=message.guild_id,
-            user_id=message_user_id
+    try:
+        direct_message_guild = await dms_api.create_direct_message(
+            CreateDirectMessageRequest(
+                source_guild_id=message.guild_id,
+                user_id=message_user_id
+            )
         )
-    )
-
-    await dms_api.post_direct_message(
-        guild_id=direct_message_guild.guild_id,
-        message_send=MessageSendRequest(
-            content=content,
-            msg_id=message_msg_id
+        await dms_api.post_direct_message(
+            guild_id=direct_message_guild.guild_id,
+            message_send=MessageSendRequest(
+                content=content,
+                msg_id=message_msg_id
+            )
         )
-    )
-
-
-async def reply_direct_text_duty(message: qqbot.Message, content: str, user_id=None, msg_id=None):
-    """发送固定自召唤管理频道的私信消息
-    - message：固定的参数 `qqbot.Message`
-    - content：回复文本内容
-    - user_id: 要私信的用户ID`(选填)`
-    - msg_id: 消息ID `(选填)`
-    """
-    if user_id is None:
-        message_user_id = message.author.id
-    else:
-        message_user_id = user_id
-    if msg_id is None:
-        message_msg_id = message.id
-    else:
-        message_msg_id = msg_id
-
-    dms_api = qqbot.AsyncDmsAPI(qqbot.Token(APPID, TOKEN), False, timeout=6)
-    direct_message_guild = await dms_api.create_direct_message(
-        CreateDirectMessageRequest(
-            source_guild_id="17590802707047114676",
-            user_id=message_user_id
+    except Exception as e:
+        msg = f"无法向管理员发送私信通知\n错误原因：{e}".replace("create direct message not allowd in this guild", "频道已限制发送私信")
+        qqbot.logger.info(msg)
+        await reply_text(
+            message=message,
+            content=msg
         )
-    )
-
-    await dms_api.post_direct_message(
-        guild_id=direct_message_guild.guild_id,
-        message_send=MessageSendRequest(
-            content=content,
-            msg_id=message_msg_id
-        )
-    )
