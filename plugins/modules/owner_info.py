@@ -274,6 +274,27 @@ class OwnerInfo(Model):
         return data
 
     @classmethod
+    async def get_bot_all(cls, bot_id: str) -> list:
+        """获取一个机器人全部数据"""
+        record_list = await cls.filter(bot_id=bot_id)
+        data = []
+        for record in record_list:
+            one_data = {
+                "guild_id": record.guild_id,
+                "user_id": record.user_id,
+                "user_name": record.user_name,
+                "channels": record.channels,
+                "user_role": record.user_role,
+                "sign_ol": record.sign_ol,
+                "sign_on_time": record.sign_on_time,
+                "sign_out_time": record.sign_out_time,
+                "duty_times": record.duty_times,
+                "duty_count": record.duty_count
+            }
+            data.append(one_data)
+        return data
+
+    @classmethod
     async def delete_user(cls, bot_id: str, guild_id: str, user_id: str) -> bool:
         """删除一个管理员"""
         record = await cls.get_or_none(bot_id=bot_id, guild_id=guild_id, user_id=user_id)
