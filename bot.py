@@ -151,10 +151,15 @@ async def _at_message_handler(event, message: qqbot.Message):
     """注册@消息事件"""
     """频道被拉黑的话不执行"""
     bot_status: bool = await GuildInfo.get_robot_status(bot.id, message.guild_id)
-    if bot_status is None or bot_status is False:
+    if bot_status is None:
         return await reply_text(
             message=message,
-            content="该频道已被拉黑，无法使用本机器人"
+            content="❎ 错误！请尝试移除机器人后重新添加"
+        )
+    if bot_status is False:
+        return await reply_text(
+            message=message,
+            content="❎该频道已被拉黑，无法使用本机器人"
         )
     await BotInfo.msg_count_plus(bot_id=bot.id)  # 记录机器人处理消息数量
     guild_api = qqbot.AsyncGuildAPI(Token, False)

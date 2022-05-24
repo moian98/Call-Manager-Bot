@@ -115,7 +115,7 @@ async def delete_channel(message: qqbot.Message):
                 channel_id=message.channel_id
             )
         except ValueError:
-            return await reply_text(message=message, content="❎<@%s>此子频道不在你管理的子频道之中，无法删除" % message.author.id)
+            return await reply_text(message=message, content="❎<@%s>你没有添加此子频道，无法删除" % message.author.id)
         if channel_if is True:
             await reply_text(message=message, content="✅<@%s>已将本子频道从你管理的列表中删除" % message.author.id)
         else:
@@ -146,12 +146,6 @@ async def owner_sign_in(message: qqbot.Message):
     elif C_ROLE_ID in member.roles:
         role_id = "5"
     user_role = await OwnerInfo.get_user_role(bot.id, message.guild_id, message.author.id)
-    channels = await OwnerInfo.get_channels(bot.id, message.guild_id, message.author.id)
-    if user_role == "5" and not channels:
-        return await reply_text(
-            message=message,
-            content="❎子频道管理员请先添加你所管理的子频道。"
-        )
     if user_role != role_id:
         await OwnerInfo.check_role(
             bot_id=bot.id,
@@ -159,6 +153,13 @@ async def owner_sign_in(message: qqbot.Message):
             user_id=message.author.id,
             user_name=message.author.username,
             role_id=role_id
+        )
+    user_role = await OwnerInfo.get_user_role(bot.id, message.guild_id, message.author.id)
+    channels = await OwnerInfo.get_channels(bot.id, message.guild_id, message.author.id)
+    if user_role == "5" and not channels:
+        return await reply_text(
+            message=message,
+            content="❎子频道管理员请先添加你所管理的子频道。"
         )
     sign_on: int = await OwnerInfo.set_sign_in(
         bot_id=bot.id,
