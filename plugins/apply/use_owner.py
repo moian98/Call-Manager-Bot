@@ -107,12 +107,15 @@ async def delete_channel(message: qqbot.Message):
     member_api = qqbot.AsyncGuildMemberAPI(Token, False)
     member = await member_api.get_guild_member(message.guild_id, message.author.id)
     if C_ROLE_ID in member.roles:
-        channel_if: bool = await OwnerInfo.delete_channels(
-            bot_id=bot.id,
-            guild_id=message.guild_id,
-            user_id=message.author.id,
-            channel_id=message.channel_id
-        )
+        try:
+            channel_if: bool = await OwnerInfo.delete_channels(
+                bot_id=bot.id,
+                guild_id=message.guild_id,
+                user_id=message.author.id,
+                channel_id=message.channel_id
+            )
+        except ValueError:
+            return await reply_text(message=message, content="❎<@%s>此子频道不在你管理的子频道之中，无法删除" % message.author.id)
         if channel_if is True:
             await reply_text(message=message, content="✅<@%s>已将本子频道从你管理的列表中删除" % message.author.id)
         else:
