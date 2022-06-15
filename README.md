@@ -13,7 +13,7 @@ tortoise-orm 0.19.0    # SQLite3 ORM
 schedule 1.1.0         # 定时执行任务
 ```
 ### 开源许可
-本项目使用MIT许可证开源
+本项目使用[MIT](https://github.com/moian98/Call-Manager-Bot/blob/master/LICENSE)许可证开源
 ```
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
