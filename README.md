@@ -13,7 +13,7 @@ tortoise-orm 0.19.0    # SQLite3 ORM
 schedule 1.1.0         # 定时执行任务
 ```
 ### 注意事项
-首次运行需将`bot.py 215行`注释取消掉
+首次运行需将`bot.py 220行`注释取消掉
 ### 开源许可
 本项目使用[MIT](https://github.com/moian98/Call-Manager-Bot/blob/master/LICENSE)许可证开源
 ```
